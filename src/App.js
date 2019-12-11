@@ -1,26 +1,22 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React,  { useState, useEffect } from 'react';
+import  { BrowserRouter as Router, Route } from "react-router-dom";
+import HomePage from "./pages/home/home.js";
+import LoginPage from "./pages/login/login.js";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+function AppPage() {
+    const [loginName, setLoginName ] = useState('admin')
+    //当传空数组[]时，就是当组件将被销毁时才进行解绑，这也就实现了componentWillUnmount的生命周期函数
+    useEffect(()=>{
+        //异步，每次加载或者更新都会执行
+        console.log(new Date().getTime());
+    },[])
+    return (
+        <div>
+            <Router>
+                <Route exact path="/loginPage" component={LoginPage}/>
+                <Route path="/homePage/index" exact component={HomePage}/>
+            </Router>
+        </div>
+    )
 }
-
-export default App;
+export default AppPage;
