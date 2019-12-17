@@ -1,11 +1,11 @@
 import React,{ useState } from 'react';
-import Layout from '@/pages/layout';
+import { LayoutPage } from '@/pages/layout';
 function HomePage() {
     const [ userName, setUserName ] = useState("admin");
     return (
         <div>
             welcom {userName} !
-            <Layout/>
+            <LayoutPage/>
         </div>
     )
     
