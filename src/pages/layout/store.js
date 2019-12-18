@@ -1,5 +1,4 @@
-export const initialState = {comType: 'comList',contentType:'views',viewsComList: []};
-export const initialViewsState = {viewsComList: []};
+export const initialState = {nowIndex:'',comType: 'comList',contentType:'views',decorationType:'attribute',viewsComList: []};
 export const myreducer = (state,action)=> {
     console.log(action)
     switch (action.type) {
@@ -7,18 +6,17 @@ export const myreducer = (state,action)=> {
             return {...state,comType:action.value}
         case 'setContentItem':
             return {...state,contentType:action.value}
+        case 'setDecoration':
+            return {...state,decorationType:action.value}
         case 'addBtn':
-            let viewsComList = state.viewsComList.push('btnCom');
-            console.log({...state,viewsComList:viewsComList});
-            return {...state,viewsComList:viewsComList}
-        default:
-            return state;
-    }
-}
-export const comListReducer = (state,action) => {
-    switch (action.type) {
-        case 'addBtn':
-            return state.viewsComList.push('btnCom')
+            state.viewsComList.push({id:11,type:"CyqBtn",decoration:{text:'我是按钮'}}) ;
+            return {...state}
+        case 'setNowComId':
+            console.log(action.value)
+            return {...state,nowIndex:action.value}
+        case 'changeDecoration':
+            state.viewsComList[state.nowIndex].decoration.text = action.value;
+                return {...state}
         default:
             return state;
     }

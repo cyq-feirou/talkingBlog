@@ -3,11 +3,13 @@ import {Button, Layout, Menu, Breadcrumb,Icon} from 'antd';
 import { Link } from "react-router-dom";
 import { message } from 'antd';
 import "./index.css"
-import Coms from './component/coms.js';
-import ComList from './component/comList.js';
-import {Views} from "./component/views.js";
-import ComDetails from "./component/comDetails.js";
-import ViewSetting from "./component/viewSetting.js";
+import "./css/common.css";
+import Coms from './component/left/coms.js';
+import ComList from './component/left/comList.js';
+import {Views} from "./component/center/views.js";
+import ComDetails from "./component/center/comDetails.js";
+import ViewSetting from "./component/center/viewSetting.js";
+import AttributteCom from "./component/right/attributteCom.js";
 
 import {initialState , myreducer } from './store';
 const { Header, Content, Footer, Sider } = Layout;
@@ -60,7 +62,7 @@ export const LayoutPage = (params)=> {
                     <Layout>
                         <Sider width={300}>
                             <Layout>
-                                <Header>
+                                <Header style={{ padding: 0}}>
                                     <Menu
                                     mode="horizontal"
                                     defaultSelectedKeys={['comList']}
@@ -93,28 +95,27 @@ export const LayoutPage = (params)=> {
                                 {ContentMenuItem}
                             </LayoutContext.Provider >
                         </Content>
-                        <Sider>
-                        <Menu
-                            mode="inline"
-                            defaultSelectedKeys={['1']}
-                            defaultOpenKeys={['sub1']}
-                            style={{ height: '100%', borderRight: 0 }}
-                            >
-                            <SubMenu
-                                key="sub1"
-                                title={
-                                <span>
-                                    <Icon type="user" />
-                                    subnav 1
-                                </span>
-                                }
-                            >
-                                <Menu.Item key="1">option1</Menu.Item>
-                                <Menu.Item key="2">option2</Menu.Item>
-                                <Menu.Item key="3">option3</Menu.Item>
-                                <Menu.Item key="4">option4</Menu.Item>
-                            </SubMenu>
-                            </Menu>
+                        <Sider width={300}>
+                            <Layout>
+                                <Header style={{ padding: 0}}>
+                                    <Menu
+                                    mode="horizontal"
+                                    defaultSelectedKeys={['attribute']}
+                                    defaultOpenKeys={['sub1']}
+                                    style={{ height: '100%'}}
+                                    >
+                                        <Menu.Item key="attribute" onClick={()=>dispatch({type:'setDecoration',value:"attribute"})}>属性</Menu.Item>
+                                        <Menu.Item key="style" onClick={()=>dispatch({type:"setDecoration",value:"style"})}>样式</Menu.Item>
+                                        <Menu.Item key="cartoon" onClick={()=>dispatch({type:"setDecoration",value:"cartoon"})}>动画</Menu.Item>
+                                        <Menu.Item key="viewsSetting" onClick={()=>dispatch({type:"setDecoration",value:"viewsSetting"})}>页面设置</Menu.Item>
+                                    </Menu>
+                                </Header>
+                                <Content>
+                                    <LayoutContext.Provider value={{ state, dispatch }}>
+                                        <AttributteCom/>
+                                    </LayoutContext.Provider >
+                                </Content>
+                            </Layout>
                         </Sider>
                     </Layout>
                     

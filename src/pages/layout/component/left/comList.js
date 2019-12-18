@@ -1,10 +1,8 @@
-import React,{ useState, useContext} from "react";
+import React,{ useState, useContext,useEffect} from "react";
 import { LayoutContext } from '@/pages/layout';
 
 function  ComList() {
-const {state,dispatch}= useContext(LayoutContext);
-const [comListArr,setComListArr] = useState(["1",'2']);
-
+    const {state,dispatch}= useContext(LayoutContext);
     return (
         <div>
             <ul>

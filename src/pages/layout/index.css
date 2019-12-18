@@ -1,3 +1,10 @@
 .ant-layout-header {
     display: flex;
 }
+*{
+    padding: 0;
+    margin: 0;;
+}
+ul,ol {
+    list-style:none
+}
