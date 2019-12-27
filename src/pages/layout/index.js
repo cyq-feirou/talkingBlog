@@ -11,6 +11,9 @@ import ComDetails from "./component/center/comDetails.js";
 import ViewSetting from "./component/center/viewSetting.js";
 import AttributteCom from "./component/right/attributteCom.js";
 
+//组件树组件
+import ComTree from "./component/left/comTree";
+
 import {initialState , myreducer } from './store';
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -58,10 +61,10 @@ export const LayoutPage = (params)=> {
                         <Menu.Item key="2" onClick={doPublish}>发布</Menu.Item>
                     </Menu>
                 </Header>
-                <Content style={{ padding: '0 50px' }}>
+                <Content style={{ padding: '0 50px'}}>
                     <Layout>
                         <Sider width={300}>
-                            <Layout>
+                            <Layout style={{ padding:'0 0 20px 0' }}>
                                 <Header style={{ padding: 0}}>
                                     <Menu
                                     mode="horizontal"
@@ -76,6 +79,24 @@ export const LayoutPage = (params)=> {
                                 <Content>
                                     <LayoutContext.Provider value={{ state, dispatch }}>
                                         {state.comType==='comList' ? <ComList/> : <Coms />}
+                                    </LayoutContext.Provider >
+                                </Content>
+                            </Layout>
+                            <Layout>
+                                <Header style={{ padding: 0}}>
+                                    <Menu
+                                    mode="horizontal"
+                                    defaultSelectedKeys={['comTree']}
+                                    defaultOpenKeys={['sub1']}
+                                    style={{ height: '100%', borderRight: '1px solid #e8e8e8'}}
+                                    >
+                                        <Menu.Item key="comTree" onClick={()=>dispatch({type:'showComTree',value:true})}>组件树</Menu.Item>
+                                        <Menu.Item key="pageModel">页面模板</Menu.Item>
+                                    </Menu>
+                                </Header>
+                                <Content>
+                                    <LayoutContext.Provider value={{ state, dispatch }}>
+                                        {state.isShowComTree ? <ComTree/> : '我是页面组件'}
                                     </LayoutContext.Provider >
                                 </Content>
                             </Layout>
