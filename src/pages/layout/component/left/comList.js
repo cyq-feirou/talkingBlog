@@ -26,7 +26,7 @@ function  ComList() {
             <ul className="comList-list" style={{'padding':'10px'}}>
                 {
                     comList.map((item,index)=> 
-                        <li style={{'float':'left','cursor':'pointer'}} onClick={()=>dispatch({type:'addBanCom',comType:item.comType})} key={index}>
+                        <li style={{'float':'left','cursor':'pointer'}} onClick={()=>dispatch({type:'addBanCom',comType:item.comType,text:item.text})} key={index}>
                             <BanCom comObj={item}/>
                         </li>
                 )}    

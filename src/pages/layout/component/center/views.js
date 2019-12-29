@@ -34,7 +34,8 @@ export const Views = ()=> {
         <div className="root">
             <div className="root-box">
                 {state.viewsComList.map((item,index) =>
-                    <div key={index}>
+                    <div key={index} className={item.active?'ban-active':null}>
+                        <span>{item.active}</span>
                         <SingleCom item={item}/>
                     </div>
                 )}

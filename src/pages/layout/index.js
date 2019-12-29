@@ -117,7 +117,7 @@ export const LayoutPage = (params)=> {
                             </LayoutContext.Provider >
                         </Content>
                         <Sider width={300}>
-                            <Layout>
+                            <Layout style={{borderLeft:'1px solid #f5f5f5',background:'#fff'}}>
                                 <Header style={{ padding: 0}}>
                                     <Menu
                                     mode="horizontal"
