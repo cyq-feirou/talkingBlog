@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 import React,  { useEffect } from 'react';
 import  { BrowserRouter as Router, Route, withRouter } from "react-router-dom";
+=======
+import React,  {  useEffect } from 'react';
+import  { BrowserRouter as Router, Route } from "react-router-dom";
+>>>>>>> 0d53dbad4c6a64918d2e8d714cb16b8f41272461
 import HomePage from "./pages/home/home.js";
 import './App.scss';
 function AppPage() {
