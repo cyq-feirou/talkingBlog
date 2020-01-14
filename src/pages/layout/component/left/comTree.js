@@ -6,13 +6,9 @@ const { Panel } = Collapse;
 
 function  ComTree() {
     const {state,dispatch}= useContext(LayoutContext);
-    console.log(state)
     const callback = (key)=> {
-        console.log(key);
-        // dispatch({type:'changeNodeActive',_id:key})
     }
     const changeNodeActive = (_id)=> {
-        console.log(999999)
         dispatch({type:'changeNodeActive',_id:_id})
     }
     return (

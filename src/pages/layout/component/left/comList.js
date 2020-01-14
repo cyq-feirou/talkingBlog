@@ -1,10 +1,10 @@
-import React,{ useState, useContext,useEffect} from "react";
+import React,{ useContext } from "react";
 import { LayoutContext } from '@/pages/layout';
 import BanCom from '@/components/com.js';
 import iconBtn from '@/images/icon/iconBtn.png';
 
 function  ComList() {
-    const {state,dispatch}= useContext(LayoutContext);
+    const {dispatch}= useContext(LayoutContext);
     let comList = [{
         _id:123,
         comType:'BanBtn',
@@ -30,7 +30,6 @@ function  ComList() {
                             <BanCom comObj={item}/>
                         </li>
                 )}    
-                {/* <li onClick={()=>dispatch({type:'text'})}>添加文本</li> */}
             </ul>
         </div>
     )

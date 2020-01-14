@@ -1,4 +1,4 @@
-import React,  { useState, useEffect, createContext,useContext,useRef } from 'react';
+import React,  { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom"
 import {Button, message, Input} from 'antd';
 import api from "@/api/index.js";
@@ -8,7 +8,7 @@ function RegisterPage() {
     const [loginName, setLoginName ] = useState('');
     const [password, setPassword ] = useState('');
     const [secPassword, setSecPassword ] = useState('');
-    const [checkCode, setCheckCode ] = useState('');
+    // const [checkCode, setCheckCode ] = useState('');
 
 
     let history = useHistory();

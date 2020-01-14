@@ -1,7 +1,5 @@
-import React, { useState, Context, createContext, useContext, useReducer } from 'react';
-import {Button, Layout, Menu, Breadcrumb,Icon} from 'antd';
-import { Link } from "react-router-dom";
-import { message } from 'antd';
+import React, { useState, createContext, useReducer, useEffect } from 'react';
+import { Layout, Menu } from 'antd';
 import "./index.css"
 import "./css/common.css";
 import Coms from './component/left/coms.js';
@@ -10,17 +8,20 @@ import {Views} from "./component/center/views.js";
 import ComDetails from "./component/center/comDetails.js";
 import ViewSetting from "./component/center/viewSetting.js";
 import AttributteCom from "./component/right/attributteCom.js";
+import api from "@/api/index.js";
 
 //组件树组件
 import ComTree from "./component/left/comTree";
 
-import {initialState , myreducer } from './store';
-const { Header, Content, Footer, Sider } = Layout;
-const { SubMenu } = Menu;
+import {initialState , myreducer, initialView, viewsReducer } from './store';
+const { Header, Content, Sider } = Layout;
 export const LayoutContext = createContext();
-export const LayoutPage = (params)=> {
+export const LayoutPage = ()=> {
     const [state, dispatch] = useReducer(myreducer, initialState);
+    const [viewsInfo, viewsAction] = useReducer(viewsReducer, initialView);
+    const [projectId] = useState(222);
     console.log(state);
+    console.log(viewsInfo)
     const doSaveViews = ()=>{
         alert("保存成功！")
     }
@@ -35,7 +36,16 @@ export const LayoutPage = (params)=> {
     } else if(state.contentType==='viewSetting') {
         ContentMenuItem = <ViewSetting/>
     }
-   
+    const getShortViewsInfo = async ()=>{
+        let data = await api.get("/views/getShortViewsInfo",{projectId:projectId})
+        if(data.code===0&&data.state===1) {
+            viewsAction({type:'setSortViewsInfo',data:data.data});
+        }
+        
+    }
+    useEffect(()=>{
+        getShortViewsInfo();
+       },[])
     return (
         <div className="layoutPage">
             <Layout className="layout" style={{ height: '100%'}}>
@@ -77,7 +87,7 @@ export const LayoutPage = (params)=> {
                                     </Menu>
                                 </Header>
                                 <Content>
-                                    <LayoutContext.Provider value={{ state, dispatch }}>
+                                    <LayoutContext.Provider value={{ state, dispatch,viewsInfo, viewsAction }}>
                                         {state.comType==='comList' ? <ComList/> : <Coms />}
                                     </LayoutContext.Provider >
                                 </Content>
@@ -95,7 +105,7 @@ export const LayoutPage = (params)=> {
                                     </Menu>
                                 </Header>
                                 <Content>
-                                    <LayoutContext.Provider value={{ state, dispatch }}>
+                                    <LayoutContext.Provider value={{ state, dispatch, viewsInfo, viewsAction }}>
                                         {state.isShowComTree ? <ComTree/> : '我是页面组件'}
                                     </LayoutContext.Provider >
                                 </Content>
@@ -112,7 +122,7 @@ export const LayoutPage = (params)=> {
                                 <Menu.Item key="comDetails" onClick={()=>dispatch({type:"setContentItem",value:"comDetails"})}>组件详情</Menu.Item>
                                 <Menu.Item key="viewSetting" onClick={()=>dispatch({type:"setContentItem",value:"viewSetting"})}>页面设置</Menu.Item>
                             </Menu>
-                            <LayoutContext.Provider value={{ state, dispatch }}>
+                            <LayoutContext.Provider value={{ state, dispatch, viewsInfo, viewsAction }}>
                                 {ContentMenuItem}
                             </LayoutContext.Provider >
                         </Content>
@@ -132,7 +142,7 @@ export const LayoutPage = (params)=> {
                                     </Menu>
                                 </Header>
                                 <Content>
-                                    <LayoutContext.Provider value={{ state, dispatch }}>
+                                    <LayoutContext.Provider value={{ state, dispatch, viewsInfo, viewsAction }}>
                                         <AttributteCom/>
                                     </LayoutContext.Provider >
                                 </Content>

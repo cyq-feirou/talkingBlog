@@ -1,8 +1,10 @@
-import React,{createContext,useContext, useReducer} from "react";
-import "@/pages/layout/css/views.css";
+import React,{useContext} from "react";
+import "./center.scss";
 import BanBtn from "@/components/btn";
 import BanText from "@/components/text";
 import BanPicture from "@/components/picture";
+import api from "@/api/index.js";
+import { message } from 'antd';
 
 import { LayoutContext } from '@/pages/layout';
 
@@ -29,16 +31,57 @@ function SingleCom(props) {
 }
 //整个页面
 export const Views = ()=> {
-    const {state}= useContext(LayoutContext);
+    const {state,dispatch}= useContext(LayoutContext);
+    
+    const changeNodeActive = (_id)=> {
+        dispatch({type:'changeNodeActive',_id:_id})
+    }
+    const handleViewsAction = async (type)=> {
+        switch (type) {
+            case 'save':
+                let params = {
+                    projectId:222
+                }
+            let data = await api.postJson("/views/saveViews",params);
+            if(data.code===0&&data.state===1) {
+                message.success('保存成功!')
+                dispatch({type:'setSortViewsInfo',data:data})
+            } else {
+                message.warning(data.message);
+            }
+                break;
+            default:
+                break;
+        }
+    }
+    // const getShortViewsInfo = async ()=>{
+    //     let data = await api.get("/views/getShortViewsInfo",{projectId:projectId}).then((data)=>{
+    //         if(data.code===0&&data.state===1) {
+    //             dispatch({type:'setSortViewsInfo',data:data.data});
+    //         }
+    //     });
+        
+    // }
+    // useEffect(()=>{
+    //     getShortViewsInfo();
+    //    },[])
     return (
         <div className="root">
             <div className="root-box">
                 {state.viewsComList.map((item,index) =>
-                    <div key={index} className={item.active?'ban-active':null}>
+                    <div key={index} className={item.active?'ban-active':null} onClick={(e)=>changeNodeActive(item._id)}>
                         <span>{item.active}</span>
-                        <SingleCom item={item}/>
+                        <SingleCom item={item} />
                     </div>
                 )}
+            </div>
+            <div className="root-action">
+                <ul>
+                    <li onClick={()=>handleViewsAction('pre')}>pre</li>
+                    <li onClick={()=>handleViewsAction('next')}>next</li>
+                    <li onClick={()=>handleViewsAction('save')}>save</li>
+                    <li onClick={()=>handleViewsAction('review')}>review</li>
+                </ul>
             </div>
         </div>
     )

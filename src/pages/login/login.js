@@ -1,4 +1,4 @@
-import React,  { useState, useEffect, createContext,useContext,useRef } from 'react';
+import React,  { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom"
 import {Button, message, Input} from 'antd';
 import api from "@/api/index.js";
@@ -6,8 +6,8 @@ import './login.css';
 function LoginPage() {
     const [loginName, setLoginName ] = useState('admin');
     const [password, setPassword ] = useState('');
-    const [checkCode, setCheckCode ] = useState('');
-    const [actionType, setActionType ] = useState('login');
+    // const [checkCode, setCheckCode ] = useState('');
+    // const [actionType, setActionType ] = useState('login');
 
 
     let history = useHistory();

@@ -3,18 +3,17 @@ import { LayoutContext } from '@/pages/layout';
 import "./right.scss";
 import { Input, Select } from "antd";
 const { Option } = Select;
-const AttributteCom = (props)=> {
-    const {state,dispatch}= useContext(LayoutContext);
+const AttributteCom = ()=> {
+    const {state,dispatch,viewsInfo,viewsAction}= useContext(LayoutContext);
     const [nowNode,setNowNode] = useState({});
     useEffect(()=>{
-        console.log(state.viewsComList)
-        state.viewsComList.map((item,index)=>{
+        state.viewsComList.map((item)=>{
             if(item.active) {
                 setNowNode(item);
             }
+            return false;
         })
-        console.log(nowNode,'nowNode')
-    })
+    },[])
     const handleChange = (obj)=> {
         dispatch({type:'changeDecoration',nodeObj:{_id:nowNode._id,attr:{[obj.type]:obj.value}}})
     }

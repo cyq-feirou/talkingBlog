@@ -1,7 +1,7 @@
 import React,{ useState } from 'react';
 import { LayoutPage } from '@/pages/layout';
 function HomePage() {
-    const [ userName, setUserName ] = useState("admin");
+    const [ userName ] = useState("admin");
     return (
         <div>
             welcom {userName} !
