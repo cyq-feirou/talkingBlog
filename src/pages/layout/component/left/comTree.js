@@ -5,20 +5,25 @@ import "./left.css";
 const { Panel } = Collapse;
 
 function  ComTree() {
-    const {state,dispatch}= useContext(LayoutContext);
+    // const {state,dispatch}= useContext(LayoutContext);
+    const {viewsInfo,viewsAction}= useContext(LayoutContext);
     const callback = (key)=> {
     }
-    const changeNodeActive = (_id)=> {
-        dispatch({type:'changeNodeActive',_id:_id})
+    const changeNodeActive = (id)=> {
+        viewsAction({type:'changeNodeActive',id:id})
     }
     return (
         <div className={'comTree'}>
-           <Collapse defaultActiveKey={state.viewsComList[0]?[state.viewsComList[0]._id]:['1']} onChange={callback}>
-                <Panel header="root" key={state.viewsComList[0]?state.viewsComList[0]._id:'1'}>
+           <Collapse defaultActiveKey={'1'} onChange={callback}>
+                <Panel header="root" key={'1'}>
                     {
-                        state.viewsComList.map((item,index) =>
-                                <p onClick={(e)=>changeNodeActive(item._id)} key={index} className={`comTree-node ${item.active?'activeNode':''}`}>{item.comType}</p>
-                    )}
+                        viewsInfo.content.child?viewsInfo.content.child.map((item,index) =>
+                                <p onClick={(e)=>changeNodeActive(item.id)} 
+                                    key={index} 
+                                    className={`comTree-node ${item.active?'activeNode':''}`}>
+                                        {item.label}
+                                </p>
+                    ):""}
                 </Panel>
            </Collapse>
         </div>

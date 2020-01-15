@@ -1,5 +1,5 @@
 import React, { useState, createContext, useReducer, useEffect } from 'react';
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, message } from 'antd';
 import "./index.css"
 import "./css/common.css";
 import Coms from './component/left/coms.js';
@@ -9,6 +9,7 @@ import ComDetails from "./component/center/comDetails.js";
 import ViewSetting from "./component/center/viewSetting.js";
 import AttributteCom from "./component/right/attributteCom.js";
 import api from "@/api/index.js";
+import  { withRouter } from "react-router-dom";
 
 //组件树组件
 import ComTree from "./component/left/comTree";
@@ -16,17 +17,21 @@ import ComTree from "./component/left/comTree";
 import {initialState , myreducer, initialView, viewsReducer } from './store';
 const { Header, Content, Sider } = Layout;
 export const LayoutContext = createContext();
-export const LayoutPage = ()=> {
+function Layouts (props) {
+    const { match, location, history } = props;
     const [state, dispatch] = useReducer(myreducer, initialState);
     const [viewsInfo, viewsAction] = useReducer(viewsReducer, initialView);
-    const [projectId] = useState(222);
-    console.log(state);
-    console.log(viewsInfo)
     const doSaveViews = ()=>{
-        alert("保存成功！")
+        // let data = await api.post("/views/publishViews",{projectId:viewsInfo.projectId})
+        // if(data.code===0&&data.state===1) {
+        //     message.success('发布成功！')
+        // }
     }
-    const doPublish = ()=>{
-        alert("发布成功！")
+    const doPublish = async ()=>{
+        let data = await api.post("/views/publishViews",{projectId:viewsInfo.projectId})
+        if(data.code===0&&data.state===1) {
+            message.success('发布成功！')
+        }
     }
     let ContentMenuItem = null
     if (state.contentType==='views') {
@@ -36,14 +41,18 @@ export const LayoutPage = ()=> {
     } else if(state.contentType==='viewSetting') {
         ContentMenuItem = <ViewSetting/>
     }
+    //获取页面信息
     const getShortViewsInfo = async ()=>{
-        let data = await api.get("/views/getShortViewsInfo",{projectId:projectId})
+        let data = await api.get("/views/getShortViewsInfo",{projectId:viewsInfo.projectId})
         if(data.code===0&&data.state===1) {
             viewsAction({type:'setSortViewsInfo',data:data.data});
+        } else {
+            message.warning(data.message)
         }
-        
     }
+    //存储页面信息
     useEffect(()=>{
+        viewsAction({type:'setProjectId',projectId:match.params.projectId});
         getShortViewsInfo();
        },[])
     return (
@@ -156,4 +165,4 @@ export const LayoutPage = ()=> {
     )
     
 }
-// export default LayoutPage;
+export const LayoutPage = withRouter(Layouts) ;

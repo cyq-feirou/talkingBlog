@@ -17,7 +17,7 @@ function AppPage() {
                 <Route exact path="/loginPage" component={LoginPage}/>
                 <Route exact path="/registerPage" component={RegisterPage}/>
                 <Route exact path="/registerSuccess" component={RegisterSuccessPage}/>
-                <Route path="/homePage/index" exact component={HomePage}/>
+                <Route path="/homePage/:projectId" exact component={HomePage}/>
             </Router>
         </div>
     )

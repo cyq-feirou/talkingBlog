@@ -1,5 +1,6 @@
 
 export const initialState = {
+
     comType: 'comList',
     contentType:'views',
     decorationType:'attribute',
@@ -7,41 +8,22 @@ export const initialState = {
     isShowComTree: true
 };
 export const initialView = {
-    viewsObj:{}
+    projectId:'',//项目id
+    viewsObj:{},//页面数据
+    content:{},
+    link:'',
+    minlink:'',
+    title:'',
+    viewsKey:''
 };
 export const myreducer = (state,action)=> {
     console.log(action)
     switch (action.type) {
-        //获取接口数据
-        case 'setSortViewsInfo':
-            state.viewsObj = action.data;
-            return {...state}
-        //添加组件
-        case 'addBanCom':
-            let randId = parseInt(Math.random() * 1000);
-            state.viewsComList.push({
-                _id:randId,
-                comType:action.comType,
-                active:false,
-                text:action.text,
-                comName:action.comType+randId,
-                class:'default'
-            }) ;
-            return {...state}
+        
         //显示组件树
         case 'showComTree':
             return {...state,isShowComTree:action.isShowComTree}
-        //改变当前选中节点的active
-        case 'changeNodeActive':
-            console.log(action)
-            state.viewsComList.map((item)=>{
-                item.active = false;
-                if(action._id===item._id) {
-                    item.active = true
-                } 
-                return false;
-            })
-            return {...state}
+        
         //设置当前选中节点的属性
         case 'changeDecoration':
             console.log(action)
@@ -70,12 +52,33 @@ export const myreducer = (state,action)=> {
 }
 export const viewsReducer = (state,action)=> {
     switch (action.type) {
+        //保存页面projectId
+        case 'setProjectId':
+            state.projectId = action.projectId;
+            return {...state};
         //获取接口数据
         case 'setSortViewsInfo':
-            console.log(state)
-
-            console.log(action.data)
             state.viewsObj = action.data;
+            state.content = JSON.parse(action.data.content);
+            return {...state}
+        //页面添加节点
+        case 'addBanCom':
+            state.content.child.push(action.comObj);
+            return {...state}
+            //改变当前选中节点的active
+        case 'changeNodeActive':
+            state.content.child.map((item)=>{
+                item.active = false;
+                if(action.id===item.id) {
+                    item.active = true
+                } 
+                return false;
+            })
+            return {...state}
+        case 'setViewsSettingInfo':
+            Object.keys(action.data).map((key,index)=>{
+                state[key]=action.data[key]
+            })
             return {...state}
         default:
             return state;

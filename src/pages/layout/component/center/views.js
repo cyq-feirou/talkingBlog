@@ -1,8 +1,5 @@
 import React,{useContext} from "react";
 import "./center.scss";
-import BanBtn from "@/components/btn";
-import BanText from "@/components/text";
-import BanPicture from "@/components/picture";
 import api from "@/api/index.js";
 import { message } from 'antd';
 
@@ -10,17 +7,18 @@ import { LayoutContext } from '@/pages/layout';
 
 //单个组件选择
 function SingleCom(props) {
-    console.log(props)
+    let item = props.item;
+    let type = item.type.split("/")[1];
     return(
-        <div>
+        <div className="singleCom">
             {(() => {
-                switch (props.item.comType) {
-                case 'BanBtn':
-                    return <BanBtn comObj={props.item}/>
-                case 'BanText':
-                    return <BanText comObj={props.item}/>
-                case 'BanPicture':
-                    return <BanPicture comObj={props.item}/>
+                switch (type) {
+                case 'button':
+                    return <button className="default-btn">{item.props.text}</button>
+                case 'text':
+                    return <span className="default-text">{item.props.text}</span>
+                case 'img':
+                    return <img src={item.props.src} className="default-img"/>
                 default:
                     return ''
                 }
@@ -31,21 +29,20 @@ function SingleCom(props) {
 }
 //整个页面
 export const Views = ()=> {
-    const {state,dispatch}= useContext(LayoutContext);
-    
+    const {viewsInfo,viewsAction}= useContext(LayoutContext);
     const changeNodeActive = (_id)=> {
-        dispatch({type:'changeNodeActive',_id:_id})
+        viewsAction({type:'changeNodeActive',_id:_id})
     }
     const handleViewsAction = async (type)=> {
         switch (type) {
             case 'save':
                 let params = {
-                    projectId:222
+                    projectId:viewsInfo.projectId,
+                    content:JSON.stringify(viewsInfo.content)
                 }
             let data = await api.postJson("/views/saveViews",params);
             if(data.code===0&&data.state===1) {
                 message.success('保存成功!')
-                dispatch({type:'setSortViewsInfo',data:data})
             } else {
                 message.warning(data.message);
             }
@@ -54,26 +51,17 @@ export const Views = ()=> {
                 break;
         }
     }
-    // const getShortViewsInfo = async ()=>{
-    //     let data = await api.get("/views/getShortViewsInfo",{projectId:projectId}).then((data)=>{
-    //         if(data.code===0&&data.state===1) {
-    //             dispatch({type:'setSortViewsInfo',data:data.data});
-    //         }
-    //     });
-        
-    // }
-    // useEffect(()=>{
-    //     getShortViewsInfo();
-    //    },[])
     return (
         <div className="root">
             <div className="root-box">
-                {state.viewsComList.map((item,index) =>
-                    <div key={index} className={item.active?'ban-active':null} onClick={(e)=>changeNodeActive(item._id)}>
-                        <span>{item.active}</span>
+                {viewsInfo.content.child?viewsInfo.content.child.map((item,index) =>
+                    <div 
+                    key={index} 
+                    className={item.active?'ban-active':null} 
+                    onClick={(e)=>changeNodeActive(item._id)}>
                         <SingleCom item={item} />
                     </div>
-                )}
+                ):""}
             </div>
             <div className="root-action">
                 <ul>
