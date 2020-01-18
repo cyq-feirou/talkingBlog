@@ -1,0 +1,19 @@
+.banApp {
+    background: url('./images/bbg.jpg') no-repeat;
+    background-size: cover ;
+    width: 100vw;
+    height: 100vh;
+    &-wrapper {
+        width: 405px;
+        height: 693px;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        margin-left: -202px;
+        margin-top: -346px;
+        background-image: url('./images/m15.png');
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        display: block;
+    }
+}
