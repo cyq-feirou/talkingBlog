@@ -1,4 +1,5 @@
 
+import config from "@/api/config";
 export const initialState = {
 
     comType: 'comList',
@@ -23,20 +24,6 @@ export const myreducer = (state,action)=> {
         //显示组件树
         case 'showComTree':
             return {...state,isShowComTree:action.isShowComTree}
-        
-        //设置当前选中节点的属性
-        case 'changeDecoration':
-            console.log(action)
-            state.viewsComList.map((node)=>{
-                if(action.nodeObj&&node._id===action.nodeObj._id) {
-                    Object.keys(action.nodeObj.attr).map((item)=>{
-                        node[item] = action.nodeObj.attr[item];
-                        return false;
-                    })
-                }
-                return false;
-            })
-            return {...state}
         //切换右边属性的设置类型
         case 'setDecoration':
             return {...state,decorationType:action.value}
@@ -75,10 +62,38 @@ export const viewsReducer = (state,action)=> {
                 return false;
             })
             return {...state}
+            //删除节点
+        case 'doDeleteNode':
+            state.content.child = state.content.child.filter((item,index)=>{
+                return action.id!==item.id;
+            })
+            console.log(state)
+            return {...state}
         case 'setViewsSettingInfo':
             Object.keys(action.data).map((key,index)=>{
+                if(key==='link'||key==='minlink') {
+                    state[key] = config.linkApi + '/home/' + state.projectId
+                    return false;
+                }
                 state[key]=action.data[key]
             })
+            return {...state}
+            //设置节点信息
+        case 'changeNodeInfo':
+            console.log(action)
+            state.content.child.map((item)=>{
+                if(action.nodeObj.id===item.id) {
+                    Object.keys(action.nodeObj).map((key,index)=>{
+                        if(key==='props') {
+                            Object.assign(item[key],action.nodeObj[key]);
+                            console.log(item[key])
+                            return false;
+                        }
+                        item[key]=action.nodeObj[key]
+                    })
+                } 
+            })
+            console.log(state)
             return {...state}
         default:
             return state;

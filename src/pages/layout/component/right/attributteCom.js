@@ -7,15 +7,19 @@ const AttributteCom = ()=> {
     const {state,dispatch,viewsInfo,viewsAction}= useContext(LayoutContext);
     const [nowNode,setNowNode] = useState({});
     useEffect(()=>{
-        state.viewsComList.map((item)=>{
-            if(item.active) {
-                setNowNode(item);
-            }
-            return false;
-        })
-    },[])
-    const handleChange = (obj)=> {
-        dispatch({type:'changeDecoration',nodeObj:{_id:nowNode._id,attr:{[obj.type]:obj.value}}})
+        if(viewsInfo.content.child) {
+            viewsInfo.content.child.map((item)=>{
+                if(item.active) {
+                    console.log(nowNode)
+                    setNowNode(item);
+                }
+                return false;
+            })
+        }
+    })
+    const changeNodeInfo = (obj)=> {
+        console.log(obj.value.type)
+        viewsAction({type:'changeNodeInfo',nodeObj:{id:nowNode.id,[obj.type]:obj.value}})
     }
     return (
         <div className="attr">
@@ -23,22 +27,22 @@ const AttributteCom = ()=> {
                 <h5>基础信息</h5>
                 <div className={'attr-setting-item'}>
                     <span className="label">唯一id</span>
-                    <Input addonAfter="复制" value={nowNode._id} onChange={(e)=>handleChange({type:'_id',value:e.target.value})}/>
+                    <Input addonAfter="复制" value={nowNode.id} onChange={(e)=>changeNodeInfo({type:'id',value:e.target.value})}/>
                 </div>
                 <div className={'attr-setting-item'}>
                     <span className="label">名称</span>
-                    <Input value={nowNode.comName} onChange={(e)=>handleChange({type:'comName',value:e.target.value})}/>
+                    <Input value={nowNode.label} onChange={(e)=>changeNodeInfo({type:'label',value:e.target.value})}/>
                 </div>
             </div>
             <div className={'attr-setting attrSetting'}>
                 <h5>属性设置</h5>
                 <div className={'attr-setting-item'}>
                     <span className="label">按钮文字</span>
-                    <Input value={nowNode.text} onChange={(e)=>handleChange({type:'text',value:e.target.value})}/>
+                    <Input value={nowNode.props?nowNode.props.text:""} onChange={(e)=>changeNodeInfo({type:'props',value:{text:e.target.value}})}/>
                 </div>
                 <div className={'attr-setting-item'}>
                     <span style={{ width: '70px'}} >type</span>
-                    <Select value={nowNode.class} style={{ width: 120 }} onChange={(e)=>handleChange({type:'className',value:e.target.value})}>
+                    <Select value={nowNode.props?nowNode.props.type:""} style={{ width: 120 }} onChange={(e)=>changeNodeInfo({type:'props',value:{type:e}})}>
                         <Option value="none">none</Option>
                         <Option value="default">default</Option>
                         <Option value="danger">danger</Option>

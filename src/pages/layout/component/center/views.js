@@ -9,12 +9,18 @@ import { LayoutContext } from '@/pages/layout';
 function SingleCom(props) {
     let item = props.item;
     let type = item.type.split("/")[1];
+    const changeNodeActive = ()=> {
+        props.changeActive();
+    }
     return(
-        <div className="singleCom">
+        <div className={item.active?'ban-active':null}
+            onClick={changeNodeActive}
+            style={{width:"100px"}}
+            >
             {(() => {
                 switch (type) {
                 case 'button':
-                    return <button className="default-btn">{item.props.text}</button>
+                    return <button className={`default-btn ${item.props.type}`}>{item.props.text}</button>
                 case 'text':
                     return <span className="default-text">{item.props.text}</span>
                 case 'img':
@@ -30,8 +36,9 @@ function SingleCom(props) {
 //整个页面
 export const Views = ()=> {
     const {viewsInfo,viewsAction}= useContext(LayoutContext);
-    const changeNodeActive = (_id)=> {
-        viewsAction({type:'changeNodeActive',_id:_id})
+    const changeNodeActive = (id)=> {
+        console.log(2222)
+        viewsAction({type:'changeNodeActive',id:id})
     }
     const handleViewsAction = async (type)=> {
         switch (type) {
@@ -55,12 +62,12 @@ export const Views = ()=> {
         <div className="root">
             <div className="root-box">
                 {viewsInfo.content.child?viewsInfo.content.child.map((item,index) =>
-                    <div 
-                    key={index} 
-                    className={item.active?'ban-active':null} 
-                    onClick={(e)=>changeNodeActive(item._id)}>
-                        <SingleCom item={item} />
-                    </div>
+                    // <div 
+                    // key={index} 
+                    // className={item.active?'ban-active':null} 
+                    // onClick={(e)=>changeNodeActive(item._id)}>
+                        <SingleCom key={index} item={item} changeActive={(e)=>changeNodeActive(item.id)}/>
+                    // </div>
                 ):""}
             </div>
             <div className="root-action">

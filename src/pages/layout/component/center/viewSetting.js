@@ -1,11 +1,14 @@
-import React,{useContext,useEffect} from "react";
+import React,{useContext,useEffect,useState} from "react";
 import { Button, Input, message  } from 'antd';
 import { LayoutContext } from '@/pages/layout';
 import api from "@/api/index.js";
+import Clipboard from "clipboard";
+
 
 function  Coms() {
     const {state,dispathc}= useContext(LayoutContext);
     const {viewsInfo,viewsAction}= useContext(LayoutContext);
+    const [copyNum,setCopyNum] = useState(0)
     //保存页面设置修改
     const doSave = async ()=> {
         let data = await api.post("/views/setViewsInfo",{projectId:viewsInfo.projectId,title:viewsInfo.title,viewsKey:viewsInfo.viewsKey})
@@ -27,6 +30,29 @@ function  Coms() {
             message.warning(data.message)
         }
     }
+    const onMouseEnter = ()=> {
+        if(copyNum===0) {
+            doCopy(viewsInfo.link)
+            setCopyNum(1);
+            return false;
+        } 
+    }
+    const doCopy = (val)=> {
+        let clipboard = new Clipboard(".copy", {
+            text: function() {
+                return val;
+            }
+        });
+        clipboard.on("success", e => {
+            message.success("复制成功"); // 释放内存
+            clipboard.destroy();
+        });
+        clipboard.on("error", e => {
+            // 不支持复制
+            message.error("不支持自动复制"); // 释放内存
+            clipboard.destroy();
+        });
+    }
     //存储页面信息
     useEffect(()=>{
         //获取页面设置信息
@@ -40,10 +66,10 @@ function  Coms() {
                 <img src={viewsInfo.codeImg}/>
             </div>
             <div className="viewSetting-link">
-                <span>链接：</span><a herf={viewsInfo.link} className="viewSetting-link-a">{viewsInfo.link}</a><Button>拷贝</Button>
+                <span>链接：</span><a herf={viewsInfo.link} className="viewSetting-link-a">{viewsInfo.link}</a><Button onClick={(e)=>doCopy(viewsInfo.link)} onMouseEnter={onMouseEnter} className="copy">拷贝</Button>
             </div>
             <div className="viewSetting-link">
-                <span>短链：</span><a herf={viewsInfo.minlink} className="viewSetting-link-a">{viewsInfo.minlink}</a><Button>拷贝</Button>
+                <span>短链：</span><a herf={viewsInfo.minlink} className="viewSetting-link-a">{viewsInfo.minlink}</a><Button onClick={(e)=>doCopy(viewsInfo.minlink)} className="copy">拷贝</Button>
             </div>
             <div className="viewSetting-link">
                 <span>页面名称：</span>
